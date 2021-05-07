@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>Welcome!</title>
+
+</head>
+<!--    <link href="signin.css" rel="stylesheet">-->
+<body class="text-center">
+<header>
+    <nav class="navbar navbar-dark bg-dark" aria-label="Navbar" >
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Parc Adviser</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="connexion.html">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="inscription.html">Inscription</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<main>
+<div class="container" style="margin-top:30px">
+    <div class="row">
+      <div class="col-sm-4">     
+        <img class="img-fluid" src="..\assets\images\ajout.png"> 
+      </div>
+      <div class="col-sm-8">
+
+        <form action="publisherList.html" method="Post">
+          <div class="form-group">
+            <label for="commDemo">Entrer le nom du parc:</label>
+            <input type="parc" class="form-control" id="parcDemo"  name="parc" aria-describedby="passHelp" placeholder="Parc">
+            <small id="parcHelp" class="form-text text-muted">Vérifiez l'orthographe</small>
+          </div>
+
+          <div class="form-group">
+            <label for="commDemo">Entrer le libelle du parc:</label>
+            <input type="libelle" class="form-control" id="parcDemo"  name="libelle" aria-describedby="passHelp" placeholder="Libelle">
+            <small id="parcHelp" class="form-text text-muted">Vérifiez l'orthographe</small>
+          </div>
+
+          <div class="form-group">
+            <label for="commDemo">Entrer la localisation du parc:</label>
+            <input type="pays" class="form-control" id="parcDemo"  name="pays" aria-describedby="passHelp" placeholder="Pays">
+            <small id="parcHelp" class="form-text text-muted">Vérifiez l'orthographe</small>
+          </div>
+          
+           <div class="form-group">
+            <label for="commDemo">Entrer le lien vers le site officiel du parc:</label>
+            <input type="site" class="form-control" id="parcDemo"  name="site" aria-describedby="passHelp" placeholde="Lien vers le site du parc">
+            <small id="parcHelp" class="form-text text-muted">Merci de tester le lien après l'avoir coller ci-dessus</small>
+          </div>
+        
+          <select name="type">
+            <option value="S">Sensations fortes</option>
+            <option value="A">Aquatique</option>
+            <option value="">Autre</option>
+          </select>
+
+          <br><br>
+          <input type="file" name="image" />
+          <br><br>
+
+          <div class="form-group">
+            <label for="descDemo">Entrer une description</label>
+            <textarea type="description" class="form-control" id="descDemo"  name="desc" aria-describedby="passHelp" placeholder="Description" rows=5></textarea>
+            <small id="descHelp" class="form-text text-muted">400 carractères maximum</small>
+          </div>
+            
+          <button type="submit" name ="valider">Envoyer pour confirmation</button>
+          
+        </div>
+      </div>
+    </div>
+  </form>
+
+</main>
+
+
+
+</body>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/1f7457abdb.js"></script>
+</html>
