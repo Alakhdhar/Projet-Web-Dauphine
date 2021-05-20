@@ -60,7 +60,8 @@ CREATE TABLE `parc` (
   `pays` varchar(30) DEFAULT NULL,
   `description` varchar(400) DEFAULT NULL,
   `note` float NOT NULL,
-  `site` varchar(400) DEFAULT NULL
+  `site` varchar(400) DEFAULT NULL,
+  `publie` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
