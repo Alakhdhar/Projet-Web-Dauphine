@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Parcs</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <%-  include("./partials/menuRes.ejs") %>
+        <!-- Page Content-->
+        <div class="container px-4 px-lg-5">
+            <!-- Call to Action-->
+            <div class="card text-white bg-secondary my-5 py-4 text-center">
+                <div class="card-body"><p class="text-white m-0">Voici la liste des parcs notés par nos chers utilisateurs. N'hésitez pas à nous faire un retour d'expérience en votant !</p></div>
+            </div>
+            <!-- Heading Row-->
+            <div class="row gx-4 gx-lg-5 align-items-center my-5" id="listofsites">
+                <h2>Liste des parcs :</h2>
+                <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0" src="../assets/images/attraction-parc-asterix-paris.jpg" alt="..." /></div>
+                <div class="col-lg-5">
+                    <h1 class="font-weight-light">Parc Astérix</h1>
+                    <div class="info-site">
+                        <h6 class = "libelle">Parc de loisirs à Paris</h6>
+                        <img src="../assets/images/question.png" style="width: 5%;">
+                        <a class="type">Parc d'attraction</a> <br>
+                        <img src="../assets/images/adresse1.png" style="width: 5%;">
+                        <a class="pays">France</a> <br>
+                        <img src="../assets/images/website.png" style="width: 5%;">
+                        <a class="website" href="https://www.parcasterix.fr/" >Site officiel</a><br>
+                        <img src="../assets/images/vote.png" style="width: 5%;">
+                        <a class="vote"> n votes</a>
+                    </div>
+
+                    <div class="rating"><!--
+                       --><a href="#5" title="Donner 5 étoiles">☆</a><!--
+                       --><a href="#4" title="Donner 4 étoiles">☆</a><!--
+                       --><a href="#3" title="Donner 3 étoiles">☆</a><!--
+                       --><a href="#2" title="Donner 2 étoiles">☆</a><!--
+                       --><a href="#2" title="Donner 2 étoiles">☆</a><!--
+                       --><a href="#1" title="Donner 1 étoile">☆</a>
+                    </div>
+                    <br><br>
+                    <p>Avec ses 42 attractions, le Parc Astérix est le 2ème parc d'attractions implanté en France, situé à 35Kms au nord de Paris. Inspiré de la célèbre bande-dessinée d'Uderzo et Goscinny, ce parc dédié aux familles attire depuis plus de 30 ans des visiteurs conquis par les différents mondes à découvrir : de la Gaule à l'Empire Romain, en passant par la Grèce ou chez les Vikings, on voyage à travers le temps en 1 journée ou plus !</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2021</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/index.js"></script>
+    </body>
+</html>

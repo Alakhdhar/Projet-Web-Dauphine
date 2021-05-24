@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Connexion</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <%-  include("./partials/menu1.ejs") %>
+        <!-- Page Content-->
+        <div class="container px-4 px-lg-5" style="align-items: center">
+            <!-- Heading Row-->
+            <div class="row gx-4 gx-lg-5 align-items-center my-5" style="align-items: center">
+                    <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0" src="../assets/images/signin.png" style="width: 65%" alt="..." /></div>
+                   <div class="col-lg-5" >
+                    <div class="col-sm-8">
+                        <form action="/connexion" id="inscription" method="post">
+                            <h3>Inscription </h3>
+                            <div class="form-group">
+                                <label for="name">Nom :</label>
+                                <input type="text" class="form-control" id="name"  name="nom"  placeholder="Nom" >
+                            </div>
+                            <div class="form-group">
+                                <label for="surname">Prénom :</label>
+                                <input type="text" class="form-control" id="surname"  name="prenom"  placeholder="Prénom" >
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email :</label>
+                                <input type="email" class="form-control" id="email"  name="email"  placeholder="Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                                <small id="parcHelp1" class="form-text text-muted">email@adresse.nn</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mdp">Mot de passe :</label>
+                                <input type="password" class="form-control" id="mdp"  name="password" placeholder="Password" required minlength="4">
+                                <small id="parcHelp2" class="form-text text-muted">Longueur min 4</small>
+                            </div>
+
+                            <select name="type">
+                                <p>Statut :</p>
+                                <option value="U">Simple utilisateur</option>
+                                <option value="R">Responsable de parc</option>
+                            </select>
+                            <br><br>
+                            <button class="btn btn-primary" type="submit" href="/connexion">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+         </div>
+
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/index.js"></script>
+    </body>
+</html>
