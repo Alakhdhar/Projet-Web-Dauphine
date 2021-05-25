@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const dotenv = require('dotenv');
 let instance = null;
 dotenv.config();
+let idutil=0;
 
 const connection = mysql.createConnection({
     host : process.env.HOST,
@@ -39,26 +40,25 @@ class ServiceBd{
 
 
 
-    // async insertNewName(name) {
-    //     try {
-    //         const dateAdded = new Date();
-    //         const insertId = await new Promise((resolve, reject) => {
-    //             const query = "INSERT INTO user(login, date_added) VALUES ('vide',?);";
-    //             console.log ("login : " + name);
-    //             connection.query(query, [name, dateAdded] , (err, result) => {
-    //                 if (err) reject(new Error(err.message));
-    //                 resolve(result.insertId);
-    //             })
-    //         });
-    //         return {
-    //             id : insertId,
-    //             name : name,
-    //             dateAdded : dateAdded
-    //         };
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    async insertNewUser(nom,prenom,mdp,mail,statut) {
+        try {
+
+            const insertId = await new Promise((resolve, reject) => {
+                // idutil++;
+                const query = "INSERT INTO utilisateur(nom,prenom,mdp,mail,statut) VALUES (?,?,?,?,?);";
+                connection.query(query, [nom,prenom,mdp,mail,statut] , (err, result) => {
+                    if (err) return reject(err);
+                    return resolve(result.insertId);
+                })
+            });
+            return {
+                id : insertId,
+                name : nom,
+            };
+        } catch (error) {
+            console.log(error);
+        }
+    }
     // async deleteRowById(id) {
     //     try {
     //         id = parseInt(id, 10);
@@ -111,5 +111,21 @@ class ServiceBd{
     //         console.log(error);
     //     }
     // }
+    async searchByEmail(statut,mail,mdp) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT idutil FROM utilisateur WHERE statut= ? and mail = ? and mdp = ?;";
+
+                connection.query(query, [statut,mail,mdp], (err, results) => {
+                    if (err) return reject(err);
+                    return resolve(results);
+                })
+            });
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 module.exports = ServiceBd;

@@ -1,25 +1,43 @@
 const express = require('express');
 const app= express();
-const cors = require('cors');
 const serviceBd= require('./js/serviceBd');
-const formidable= require('formidable');
-app.use(cors());
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }))
+
 app.set('view engine','ejs');
 app.use("/css",express.static(__dirname + "/css"));
 app.use("/assets",express.static(__dirname + "/assets"));
 var id;
-var statut;
-app.post('/connexion', (request, response) => {
-    response.render("connexion.ejs")
-});
+
 app.get('/connexion', (request, response) => {
     response.render("connexion.ejs")
 });
 app.get('/inscription', (request, response) => {
     response.render("inscription.ejs")
 });
+app.post('/signin', (request, response) => {
+    const { nom,prenom,mdp,mail,statut} = request.body;
+    const db = serviceBd.getDbServiceInstance();
+    const result = db.insertNewUser(nom,prenom,mdp,mail,statut);
 
+    result
+        .then(data => response.redirect("/connexion"))
+        .catch(err => console.log(err));
+});
+app.post('/login', (request, response) => {
+    const { mail,mdp,statut} = request.body;
+    const db = serviceBd.getDbServiceInstance();
+    var url="";
+    if(statut ==1)
+        url+="/res"
+    else if(statut==0)
+        url+="/user"
+    const result = db.searchByEmail(statut,mail,mdp); //ne verifie pas
+    result
+        .then(data => response.redirect(url),{id: result })
+        .catch(err => console.log(err))
+});
 
 app.get('/user/voterList', (request, response) => {
     response.render("voterList.ejs")
@@ -35,16 +53,6 @@ app.get('/user/vote', (request, response) => {
 });
 app.get('/res/nouvellePub', (request, response) => {
     response.render("nouvellePub.ejs")
-});
-app.post('/res', (request, response) => {
-    id=1;
-    statut="R";
-    response.render("parcsListV1.ejs")
-});
-app.get('/res', (request, response) => {
-    id=1;
-    statut="R";
-    response.render("parcsListV1.ejs")
 });
 app.post('/user', (request, response) => {
     id=1;
@@ -66,26 +74,12 @@ app.get('/user', (request, response) => {
 });
 //Routes
 //read
-// app.post('/res', (request, response) => {
-//     const db = serviceBd.getDbServiceInstance();
-//     const result = db.getAllData();
-//     //console.log (result);
-//      result
-//         .then(data => response.json({data : data}))
-//          .then(action => response.render("parcsListV1.ejs"))
-//         .catch(err => console.log(err));
-// })
-// // create
-// app.post('/insert', (request, response) => {
-//     const { name } = request.body;
-//     const db = serviceBd.getDbServiceInstance();
-//
-//     const result = db.insertNewName(name);
-//
-//     result
-//         .then(data => response.json({ data: data}))
-//         .catch(err => console.log(err));
-// });
+app.get('/res', (request, response) => {
+    const db = serviceBd.getDbServiceInstance();
+    db.getAllData()
+        .then(data => response.render("parcsListV1.ejs", {listparcs : data}))
+        .catch(err => console.log(err));
+})
 // app.delete('/delete/:id', (request, response) => {
 //     const { id } = request.params;
 //     const db = serviceBd.getDbServiceInstance();
