@@ -19,38 +19,38 @@
             <!-- Heading Row-->
             <div class="row gx-4 gx-lg-5 align-items-center my-5" id="listofsites">
                 <h2>Liste des sites :</h2>
-                <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0" src="../assets/images/attraction-parc-asterix-paris.jpg" alt="..." /></div>
-                <div class="col-lg-5">
+                <% listparcs.forEach(function(parc){ let im="../../assets/images/"+parc.image%>
+                    <div class='col-lg-7'><img class='img-fluid rounded mb-4 mb-lg-0' src=<%=im%> /></div>
+                    <div class='col-lg-5'>
+                        <h1 class='font-weight-light'><%=parc.nom%></h1>
+                        <div class='info-site'>
+                            <h6 class = 'libelle'><%=parc.libelle%></h6>
+                            <img src='../assets/images/question.png' style='width: 5%;'>
+                            <a class='type'><%=parc.type%></a> <br>
+                            <img src='../assets/images/adresse1.png' style='width: 5%;'>
+                            <a class='pays'><%=parc.pays%></a> <br>
+                            <img src='../assets/images/website.png' style='width: 5%;'>
+                            <a class='website' href=<%=parc.site%> >Site officiel</a><br>
+                            <img src='../assets/images/vote.png' style='width: 5%;'>
+                            <a class='vote'> n votes</a></div>
 
-                    <h1 class="font-weight-light">Parc Astérix</h1>
-                    <div class="info-site">
-                        <h6 class = "libelle">Parc de loisirs à Paris</h6>
-                        <img src="../assets/images/question.png" style="width: 5%;">
-                        <a class="type">Parc d'attraction</a> <br>
-                        <img src="../assets/images/adresse1.png" style="width: 5%;">
-                        <a class="pays">France</a> <br>
-                        <img src="../assets/images/website.png" style="width: 5%;">
-                        <a class="website" href="https://www.parcasterix.fr/" >Site officiel</a><br>
-                        <img src="../assets/images/vote.png" style="width: 5%;">
-                        <a class="vote"> n votes</a>
-                    </div>
 
-                    <div class="rating"><!--
-                       --><a href="#5" title="Donner 5 étoiles">☆</a><!--
-                       --><a href="#4" title="Donner 4 étoiles">☆</a><!--
-                       --><a href="#3" title="Donner 3 étoiles">☆</a><!--
-                       --><a href="#2" title="Donner 2 étoiles">☆</a><!--
-                       --><a href="#2" title="Donner 2 étoiles">☆</a><!--
-                       --><a href="#1" title="Donner 1 étoile">☆</a>
+                        <div class='rating'><!--
+                            --><a  title='Donner 5 étoiles'>☆</a><!--
+                            --><a  title='Donner 4 étoiles'>☆</a><!--
+                            --><a  title='Donner 3 étoiles'>☆</a><!--
+                            --><a  title='Donner 2 étoiles'>☆</a><!--
+                            --><a  title='Donner 2 étoiles'>☆</a><!--
+                            --><a  title='Donner 1 étoile'>☆</a>
+                        </div><br><br>
+                        <p><%=parc.description%></p>
+                        <a class="btn btn-primary" id="infos" href="/user/vote/<%=parc.idparc%>" >Votez !</a>
+                        <br><br>
                     </div>
                     <br><br>
-                    <p>Avec ses 42 attractions, le Parc Astérix est le 2ème parc d'attractions implanté en France, situé à 35Kms au nord de Paris. Inspiré de la célèbre bande-dessinée d'Uderzo et Goscinny, ce parc dédié aux familles attire depuis plus de 30 ans des visiteurs conquis par les différents mondes à découvrir : de la Gaule à l'Empire Romain, en passant par la Grèce ou chez les Vikings, on voyage à travers le temps en 1 journée ou plus !</p>
-                    <a class="btn btn-primary" href="/user/vote">Votez !</a>
-                </div>
-            </div>
-
+                <%})%>
         </div>
-
+        </div>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2021</p></div>

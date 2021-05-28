@@ -22,17 +22,35 @@ class ServiceBd{
     static getDbServiceInstance() {
         return instance ? instance : new ServiceBd();
     }
-    async getAllData() {
+    async getAllData(arendre) {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "SELECT * FROM parc;";
 
-                connection.query(query, (err, results) => {
-                    if (err) reject(new Error(err.message));
-                    resolve(results);
+                connection.query(query, (err, rows) => {
+                    if (err) reject(err.message);
+                    arendre(rows);
+                    resolve(rows);
                 })
             });
              return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async getAllDataOf(idUser) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT parc.* FROM parc,vote where parc.idparc=vote.idparc and vote.idutil=?;";
+
+                connection.query(query,[idUser], (err, rows) => {
+                    if (err) return  Error(err.message);
+                    // arendre(rows[0]);
+                    // console.log(rows[0])
+                    resolve(rows);
+                })
+            });
+            return response;
         } catch (error) {
             console.log(error);
         }
@@ -44,7 +62,6 @@ class ServiceBd{
         try {
 
             const insertId = await new Promise((resolve, reject) => {
-                // idutil++;
                 const query = "INSERT INTO utilisateur(nom,prenom,mdp,mail,statut) VALUES (?,?,?,?,?);";
                 connection.query(query, [nom,prenom,mdp,mail,statut] , (err, result) => {
                     if (err) return reject(err);
@@ -57,6 +74,45 @@ class ServiceBd{
             };
         } catch (error) {
             console.log(error);
+        }
+    }
+    async getParcWithId(id,arendre) {
+        try {
+            id = parseInt(id, 10);
+            // console.log("IDPARC TO VOTE FOR "+id);
+
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM parc WHERE idparc = ?";
+
+                connection.query(query, [id], (err, rows) => {
+                    if (err) return reject(err.message);
+                    arendre(rows[0])
+                    return resolve(rows);
+                })
+            });
+            return response;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
+    async setNoteToParc(idParc,idUser,note) {
+        try {
+            idParc = parseInt(idParc, 10);
+            idUser = parseInt(idUser, 10);
+            // console.log(idParc+"    "+idUser+"  "+note);
+            const insertId = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO vote(idparc,idutil,note) VALUES (?,?,?);";
+
+                connection.query(query, [idParc,idUser,note] , (err, result) => {
+                    if (err) return reject(err.message);
+                    resolve(result);
+                })
+            });
+        } catch (error) {
+            console.log(error);
+            return false;
         }
     }
     // async deleteRowById(id) {
@@ -111,20 +167,42 @@ class ServiceBd{
     //         console.log(error);
     //     }
     // }
-    async searchByEmail(statut,mail,mdp) {
+    async searchByEmail(statut,mail,mdp,arendre) {
         try {
-            const response = await new Promise((resolve, reject) => {
+            const insertId = await new Promise((resolve, reject) => {
                 const query = "SELECT idutil FROM utilisateur WHERE statut= ? and mail = ? and mdp = ?;";
-
-                connection.query(query, [statut,mail,mdp], (err, results) => {
-                    if (err) return reject(err);
-                    return resolve(results);
+                connection.query(query, [statut,mail,mdp], (err, rows) => {
+                    if(rows === undefined)
+                        return reject(err);
+                    arendre(rows[0].idutil)
+                    return resolve(rows);
                 })
             });
-            console.log(response);
-            return response;
+            return insertId;
         } catch (error) {
             console.log(error);
+        }
+
+    //     let test = connection.query('SELECT idutil FROM utilisateur WHERE statut= ? and mail = ? and mdp = ?;',[statut,mail,mdp]);
+    //     console.log(parseInt(test.values[0]))
+    //     arendre(parseInt(test.values[0]))
+    //     return parseInt(test.values[0]);
+    }
+    async deleteNoteOfUserOnParc(idUser,idParc) {
+        try {
+            idUser = parseInt(idUser, 10);
+            idParc = parseInt(idParc, 10);
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM vote WHERE idutil = ? and idparc=?";
+
+                connection.query(query, [idUser,idParc] , (err, result) => {
+                    if (err) return reject(err.message);
+                    resolve(result);
+                })
+            });
+        } catch (error) {
+            console.log(error);
+            return false;
         }
     }
 }
