@@ -9,16 +9,26 @@
         <link href="../css/styles.css" rel="stylesheet" />
     </head>
     <body>
-        <%-  include("./partials/menuUser.ejs") %>
+     <%-  include("./partials/menuUser.ejs") %>
         <!-- Page Content-->
         <div class="container px-4 px-lg-5">
             <!-- Call to Action-->
             <div class="card text-white bg-secondary my-5 py-4 text-center">
-                <div class="card-body"><p class="text-white m-0">Voici la liste des parcs notés par nos chers utilisateurs. N'hésitez pas à nous faire un retour d'expérience en votant !</p></div>
+                        <div class="card-body"><p class="text-white m-0">
+                                <% if(statut ==0){%>Voici la liste des parcs notés par nos chers utilisateurs. N'hésitez pas à nous faire un retour d'expérience en votant !
+                <%}else if (statut ==1){%>
+                        Voici la liste des parcs notés par nos chers utilisateurs. N'hésitez pas à publier des informations sur vos parcs qui peuvent être utiles pour attirer les utilisateurs et les encourager à faire leur retour d'expérience  !
+                    <%}%></p></div>
             </div>
+
             <!-- Heading Row-->
             <div class="row gx-4 gx-lg-5 align-items-center my-5" id="listofsites">
                 <h2>Liste des sites :</h2>
+                <% if(listparcs.length===0) {%>
+                    <div class="card text-white bg-secondary my-5 py-4 text-center">
+                        <div class="card-body"><p class="text-white m-0"> Aucune publication pour l'instant !</p></div>
+                    </div>
+                <%}else{%>
                 <% listparcs.forEach(function(parc){ let im="../../assets/images/"+parc.image%>
                     <div class='col-lg-7'><img class='img-fluid rounded mb-4 mb-lg-0' src=<%=im%> /></div>
                     <div class='col-lg-5'>
@@ -32,7 +42,7 @@
                             <img src='../assets/images/website.png' style='width: 5%;'>
                             <a class='website' href=<%=parc.site%> >Site officiel</a><br>
                             <img src='../assets/images/vote.png' style='width: 5%;'>
-                            <a class='vote'> n votes</a></div>
+                            <a class='vote'> n votes with score : <%=parc.note%></a></div>
 
 
                         <div class='rating'><!--
@@ -44,11 +54,11 @@
                             --><a  title='Donner 1 étoile'>☆</a>
                         </div><br><br>
                         <p><%=parc.description%></p>
-                        <a class="btn btn-primary" id="infos" href="/user/vote/<%=parc.idparc%>" >Votez !</a>
+                        <% if(statut ==0){%><a class="btn btn-primary" id="infos" href="/user/vote/<%=parc.idparc%>" >Votez !</a><%}%>
                         <br><br>
                     </div>
                     <br><br>
-                <%})%>
+                <%})}%>
         </div>
         </div>
         <!-- Footer-->

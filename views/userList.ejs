@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Mes votes</title>
+        <title><% if (statut ==0){%>Mes votes<%}else if(statut ==1){%>Mes publications<%}%></title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
@@ -14,20 +14,26 @@
         <div class="container px-4 px-lg-5">
             <!-- Call to Action-->
             <div class="card text-white bg-secondary my-5 py-4 text-center">
-                <div class="card-body"><p class="text-white m-0">Voici la liste de vos votes ! Si vous avez changer d'avis, n'hésitez pas à modifier vos votes ou de les supprimer !</p></div>
+                <div class="card-body"><p class="text-white m-0"><% if (statut ==0){%>Voici la liste de vos votes ! Si vous avez changer d'avis, n'hésitez pas à modifier vos votes ou de les supprimer !<%}else if(statut ==1){%>Voici la liste de vos publications ! Si vous voulez modifier une publication,merci de la supprimer et de la republier avec les nouvelles informations. Nous prendrons le soin de la faire valider le plus tôt possible !<%}%></p></div>
             </div>
-
+            <% if (statut ==1){%>
+            <!--Nouvelle publication-->
+            <div class="newpub" >
+                <a style="float:right" href="/user/nouvellePub">Nouvelle publication</a>
+                <br><br>
+            </div>
+               <%}%>
             <!-- Heading Row-->
 
             <div class="row gx-4 gx-lg-5 align-items-center my-5" id="listofmyvotes">
-                <h2>Mes votes :</h2>
-                <% if(listVoterparcs.length===0) {%>
+                <h2><% if (statut ==0){%>Mes votes :<%}else if(statut ==1){%>Mes publications :<%}%></h2>
+                <% if(listparcs.length===0) {%>
                 <div class="card text-white bg-secondary my-5 py-4 text-center">
-                    <div class="card-body"><p class="text-white m-0"> Pas de vote en votre nom !</p></div>
+                    <div class="card-body"><p class="text-white m-0"> <% if (statut ==0){%>Pas de vote en votre nom !<%}else if(statut ==1){%>Aucune publication en votre nom ! <%}%></p></div>
                 </div>
                 <%}else{%>
-                <% listVoterparcs.forEach(function(parc){ let im='../../assets/images/'+parc.image ; %>
-                <div class='col-lg-7'><img class='img-fluid rounded mb-4 mb-lg-0' src=<%=im%> alt='...'/></div>
+                <% listparcs.forEach(function(parc){ let im='../../assets/images/'+parc.image ; %>
+                <div class='col-lg-7'><img class='img-fluid rounded mb-4 mb-lg-0' src=<%=im%> /></div>
                 <div class='col-lg-5'>
                     <h1 class='font-weight-light'><%=parc.nom%></h1>
                     <div class='info-site'>
@@ -41,7 +47,7 @@
                         <img src='../assets/images/vote.png' style='width: 5%;'>
                         <a class='vote'> n votes</a></div>
 
-
+                    <%if (statut ==0){%>
                     <div class='rating' ><!--
                         --><a href='#5'  title='Donner 5 étoiles' >☆</a><!--
                         --><a href='#4' title='Donner 4 étoiles'>☆</a><!--
@@ -49,10 +55,22 @@
                         --><a href='#2' title='Donner 2 étoiles'>☆</a><!--
                         --><a href='#2' title='Donner 2 étoiles'>☆</a><!--
                         --><a href='#1' title='Donner 1 étoile'>☆</a>
-                    </div><br><br>
+                    </div>
+                    <%}%>
+                    <br><br>
                     <p><%=parc.description%></p>
+                    <% if (statut==1){%>
+                        <% if(parc.publie==1){%>
+                            <a class="authorized">Etat de la publication:  validé </a>
+                        <%}else if(parc.publie==0){ %>
+                                <a class="authorized">Etat de la publication:  en attente de validation </a>
+                                <%}%>
+                            <br><br>
+                    <a class="btn btn-primary" href="/user/delete/<%= parc.idparc%>">Supprimer ma publication</a> <br><br>
+                    <%}else if (statut ==0){%>
                     <a class="btn btn-primary" href="/user/vote/<%= parc.idparc%>">Changer d'avis</a>
                     <a class="btn btn-primary" href="/user/delete/<%= parc.idparc%>">Supprimer mon vote</a>
+                    <%}%>
                 </div>
                 <%})}%>
             </div>

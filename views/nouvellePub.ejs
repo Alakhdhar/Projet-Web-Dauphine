@@ -9,7 +9,7 @@
         <link href="../css/styles.css" rel="stylesheet" />
     </head>
     <body>
-        <%-  include("./partials/menuRes.ejs") %>
+        <%-  include("./partials/menuUser.ejs") %>
         <!-- Page Content-->
         <div class="container px-4 px-lg-5">
             <!-- Call to Action-->
@@ -21,11 +21,11 @@
                 <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0" src="../assets/images/ajout.png" style="width: 65%" alt="..." /></div>
                 <div class="col-lg-5">
                     <div class="col-sm-8">
-                        <form action="/user/publisherList" method="Post">
+                        <form action="/user/addingPub" method="Post">
                             <h3>Nouvelle publication:</h3>
                             <div class="form-group">
                                 <label for="parcDemo">Entrer le nom du parc:</label>
-                                <input type="parc" class="form-control" id="parcDemo"  name="parc" aria-describedby="passHelp" placeholder="Parc">
+                                <input type="parc" class="form-control" id="parcDemo"  name="nameParc" aria-describedby="passHelp" placeholder="Parc">
                                 <small id="parcHelp1" class="form-text text-muted">Vérifiez l'orthographe</small>
                             </div>
 
@@ -48,9 +48,9 @@
                             </div>
 
                             <select name="type">
-                                <option value="S">Sensations fortes</option>
-                                <option value="A">Aquatique</option>
-                                <option value="">Autre</option>
+                                <option value="Sensations fortes">Sensations fortes</option>
+                                <option value="Aquatique">Aquatique</option>
+                                <option value="Autre">Autre</option>
                             </select>
 
                             <br><br>
@@ -62,10 +62,11 @@
                                 <textarea type="description" class="form-control" id="descDemo"  name="desc" aria-describedby="passHelp" placeholder="Description" rows=5></textarea>
                                 <small id="descHelp" class="form-text text-muted">400 carractères maximum</small>
                             </div>
+                            <button class="btn btn-primary" type="submit" >Envoyer pour validation</button>
                         </form>
                     </div>
                 </div>
-                <a class="btn btn-primary" href="#!">Envoyer pour validation</a>
+
                 </div>
             </div>
 

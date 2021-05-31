@@ -9,6 +9,7 @@ app.use(__dirname+"", express.static('/user'));
 app.use("/css",express.static(__dirname + "/css"));
 app.use("/assets",express.static(__dirname + "/assets"));
 var id;
+var stat;
 
 app.get('/connexion', (request, response) => {
     response.render("connexion.ejs")
@@ -29,8 +30,9 @@ app.post('/login', (request, response) => {
     const {mail, mdp, statut} = request.body;
     const db = serviceBd.getDbServiceInstance();
     var url = "";
+    stat = statut; //test
     if (statut == 1)
-        url += "/res"
+        url += "/user" //sinon res
     else if (statut == 0)
         url += "/user"
     const result = db.searchByEmail(statut, mail, mdp, function (res) {
@@ -47,12 +49,16 @@ app.post('/login', (request, response) => {
 });
 app.get('/user', (request, response) => {
     const db = serviceBd.getDbServiceInstance();
-    // const { idUser } = request.params;
-    // id=idUser;
     db.getAllData(function (row) {res = row})
-        .then(data => response.render("parcsListV2.ejs", {listparcs : res,id :id}))
+        .then(data => response.render("parcsList.ejs", {listparcs : res,id :id,statut : stat}))
         .catch(err => console.log(err));
 })
+app.get('/user/userList', (request, response) => {
+    const db = serviceBd.getDbServiceInstance();
+    db.getAllDataOfUser(id,stat)
+        .then(data => response.render("userList.ejs", {listparcs : data,statut : stat}))
+        .catch(err => console.log(err));
+});
 app.get('/user/vote/:idParc', (request, response) => {
     const idParc = request.params.idParc;
     const db = serviceBd.getDbServiceInstance();
@@ -61,7 +67,9 @@ app.get('/user/vote/:idParc', (request, response) => {
         .then(data => response.render("vote.ejs", {parc: res,idParc : idParc}))
         .catch(err => console.log(err));
 });
-
+app.get('/user/nouvellePub', (request, response) => {
+    response.render("nouvellePub.ejs")
+});
 app.post('/user/votenote/:idParc', (request, response) => {
     const { note} = request.body;
     const idParc = request.params.idParc;
@@ -69,46 +77,38 @@ app.post('/user/votenote/:idParc', (request, response) => {
     // console.log(idParc+" BLAA "+id);
     const result = db.setNoteToParc(idParc,id,note);
     console.log("NOTE ATTRIBUE "+note);
-    const url ="/user/voterList";
+    const url ="/user/userList";
     result
         .then(data => response.redirect(url))
         .catch(err => console.log(err))
 });
-app.get('/user/voterList', (request, response) => {
+app.post('/user/addingPub', (request, response) => {
+    console.log("HERE");
+    const {nameParc,libelle,pays,site,type,image,desc} = request.body;
+    console.log("HEREeeeeeeee",nameParc,libelle,pays,site,type,image,desc);
     const db = serviceBd.getDbServiceInstance();
-    id=1;
-    db.getAllDataOf(id)
-        .then(data => response.render("voterList.ejs", {listVoterparcs : data}))
-        .catch(err => console.log(err));
+    const result = db.sendNewPostForValidation(nameParc,libelle,pays,site,type,image,desc,id);
+
+    result
+        .then(data => response.redirect("/user/userList"))
+        .catch(err => console.log(err))
 });
 app.get("/user/delete/:idParc",(request, response) => {
     const idParc = request.params.idParc;
     const db = serviceBd.getDbServiceInstance();
-    const result = db.deleteNoteOfUserOnParc(id, idParc);
+    let result;
+    if(stat==0){
+         result = db.deleteNoteOfUserOnParc(id, idParc);
+    }
+    else if (stat==1){
+         result =db.deletePostOfResp(id, idParc);
+    }
+
     result
-        .then(data => response.redirect("/user/voterList"))
+        .then(data => response.redirect("/user/userList"))
         .catch(err => console.log(err))
 
 });
-
-
-app.get('/res/publisherList', (request, response) => {
-    response.render("publisherList.ejs")
-});
-
-
-app.get('/res/nouvellePub', (request, response) => {
-    response.render("nouvellePub.ejs")
-});
-//Routes
-//read
-app.get('/res', (request, response) => {
-    const db = serviceBd.getDbServiceInstance();
-    let res;
-    db.getAllData(function (row) {res = row})
-        .then(data => response.render("parcsListV1.ejs", {listparcs : res}))
-        .catch(err => console.log(err));
-})
 
 // app.delete('/delete/:id', (request, response) => {
 //     const { id } = request.params;
