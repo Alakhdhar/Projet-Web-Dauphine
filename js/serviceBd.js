@@ -24,7 +24,6 @@ class ServiceBd{
     async getAllData(arendre) {
         try {
             const response = await new Promise((resolve, reject) => {
-                this.setNotesToSites();
                 const query = "SELECT * FROM parc where parc.publie=1;";
 
                 connection.query(query, (err, rows) => {
@@ -38,13 +37,14 @@ class ServiceBd{
             console.log(error);
         }
     }
-    async setNotesToSites() {
+    async setAVGToSite(idParc) {
         try {
+            idParc = parseInt(idParc, 10);
             const response = await new Promise((resolve, reject) => {
-                const query = "UPDATE parc SET note=(select avg(vote.note) from vote, parc where parc.idparc=vote.idparc) WHERE idparc";
-                connection.query(query, (err, rows) => {
-                    if (err) reject(err.message);
-                    resolve(rows);
+                const query = "UPDATE parc SET note=(select round(avg(vote.note)) from vote, parc where parc.idparc=vote.idparc and vote.idparc=?) WHERE idparc=?";
+                connection.query(query,[idParc,idParc], (err, rows) => {
+                    if (err) return reject(err.message);
+                    return resolve(rows);
                 })
             });
             return response;
@@ -57,7 +57,7 @@ class ServiceBd{
             const response = await new Promise((resolve, reject) => {
                 let query="";
                 if(statut==0){
-                    query += "SELECT parc.* FROM parc,vote where parc.idparc=vote.idparc and parc.publie==1 and vote.idutil=?;";
+                    query += "SELECT parc.*,(vote.note) as score FROM parc,vote where parc.idparc=vote.idparc and parc.publie=1 and vote.idutil=?;";
                 }
                 else if(statut==1){
                     query += "SELECT parc.* FROM parc where parc.idpublisher=?;";
@@ -75,7 +75,6 @@ class ServiceBd{
             console.log(error);
         }
     }
-
     async insertNewUser(nom,prenom,mdp,mail,statut) {
         try {
 
@@ -114,11 +113,56 @@ class ServiceBd{
             return false;
         }
     }
-    async setNoteToParc(idParc,idUser,note) {
+    async noteTheParc(idParc,idUser,note) {
         try {
             idParc = parseInt(idParc, 10);
             idUser = parseInt(idUser, 10);
-            // console.log(idParc+"    "+idUser+"  "+note);
+            // console.log("first call to find"+idParc+"    "+idUser+"  "+note);
+
+            const find = await new Promise((resolve, reject) => {
+                const query = "select note from vote where idparc=? and idutil=? ";
+                connection.query(query, [idParc,idUser] , (err, result) => {
+                    if (err) return reject(err.message);
+                    resolve(result);
+                    // console.log(" result of search has length "+ result.length);
+                    if(result.length==0){
+                        return this.addNoteToParc(idParc,idUser,note);
+                    }else{
+                        return this.updateNoteToParc(idParc,idUser,note);
+                    }
+
+                })
+            });
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+    async updateNoteToParc(idParc,idUser,note) {
+        try {
+            idParc = parseInt(idParc, 10);
+            idUser = parseInt(idUser, 10);
+            console.log("update"+idParc+"    "+idUser+"  "+note);
+
+            const insertId = await new Promise((resolve, reject) => {
+                const query = "update vote set note=? where idparc=? and idutil=?";
+
+                connection.query(query, [note,idParc,idUser] , (err, result) => {
+                    if (err) return reject(err.message);
+                    resolve(result);
+                })
+            });
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+    async addNoteToParc(idParc,idUser,note) {
+        try {
+            idParc = parseInt(idParc, 10);
+            idUser = parseInt(idUser, 10);
+            console.log("new"+idParc+"    "+idUser+"  "+note);
+
             const insertId = await new Promise((resolve, reject) => {
                 const query = "INSERT INTO vote(idparc,idutil,note) VALUES (?,?,?);";
 
@@ -203,58 +247,5 @@ class ServiceBd{
             return false;
         }
     }
-    // async deleteRowById(id) {
-    //     try {
-    //         id = parseInt(id, 10);
-    //         const response = await new Promise((resolve, reject) => {
-    //             const query = "DELETE FROM user WHERE idUser = ?";
-    //
-    //             connection.query(query, [id] , (err, result) => {
-    //                 if (err) reject(new Error(err.message));
-    //                 resolve(result.affectedRows);
-    //             })
-    //         });
-    //
-    //         return response === 1 ? true : false;
-    //     } catch (error) {
-    //         console.log(error);
-    //         return false;
-    //     }
-    // }
-    // async updateNameById(id, name) {
-    //     try {
-    //         id = parseInt(id, 10);
-    //         const response = await new Promise((resolve, reject) => {
-    //             const query = "UPDATE user SET login = ? WHERE idUser = ?";
-    //
-    //             connection.query(query, [name, id] , (err, result) => {
-    //                 if (err) reject(new Error(err.message));
-    //                 resolve(result.affectedRows);
-    //             })
-    //         });
-    //
-    //         return response === 1 ? true : false;
-    //     } catch (error) {
-    //         console.log(error);
-    //         return false;
-    //     }
-    // }
-    // async searchByName(name) {
-    //     try {
-    //         const response = await new Promise((resolve, reject) => {
-    //             const query = "SELECT * FROM user WHERE login = ?;";
-    //
-    //             connection.query(query, [name], (err, results) => {
-    //                 if (err) reject(new Error(err.message));
-    //                 resolve(results);
-    //             })
-    //         });
-    //
-    //         return response;
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
 }
 module.exports = ServiceBd;

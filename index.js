@@ -56,7 +56,7 @@ app.get('/user', (request, response) => {
 app.get('/user/userList', (request, response) => {
     const db = serviceBd.getDbServiceInstance();
     db.getAllDataOfUser(id,stat)
-        .then(data => response.render("userList.ejs", {listparcs : data,statut : stat}))
+        .then(data =>{ response.render("userList.ejs", {listparcs : data,statut : stat})})
         .catch(err => console.log(err));
 });
 app.get('/user/vote/:idParc', (request, response) => {
@@ -74,12 +74,13 @@ app.post('/user/votenote/:idParc', (request, response) => {
     const { note} = request.body;
     const idParc = request.params.idParc;
     const db = serviceBd.getDbServiceInstance();
-    // console.log(idParc+" BLAA "+id);
-    const result = db.setNoteToParc(idParc,id,note);
+    const result = db.noteTheParc(idParc,id,note);
+
     console.log("NOTE ATTRIBUE "+note);
-    const url ="/user/userList";
     result
-        .then(data => response.redirect(url))
+        .then(data => {
+            db.setAVGToSite(idParc).then(r => response.redirect("/user/userList"));
+        })
         .catch(err => console.log(err))
 });
 app.post('/user/addingPub', (request, response) => {

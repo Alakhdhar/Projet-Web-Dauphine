@@ -44,17 +44,15 @@
                         <a class='pays'><%=parc.pays%></a> <br>
                         <img src='../assets/images/website.png' style='width: 5%;'>
                         <a class='website' href=<%=parc.site%> >Site officiel</a><br>
-                        <img src='../assets/images/vote.png' style='width: 5%;'>
-                        <a class='vote'> n votes</a></div>
+                        </div>
 
                     <%if (statut ==0){%>
                     <div class='rating' ><!--
-                        --><a href='#5'  title='Donner 5 étoiles' >☆</a><!--
-                        --><a href='#4' title='Donner 4 étoiles'>☆</a><!--
-                        --><a href='#3' title='Donner 3 étoiles'>☆</a><!--
-                        --><a href='#2' title='Donner 2 étoiles'>☆</a><!--
-                        --><a href='#2' title='Donner 2 étoiles'>☆</a><!--
-                        --><a href='#1' title='Donner 1 étoile'>☆</a>
+                        --><a <%if(parc.score>=5){%>style="color: orange;cursor: pointer;" <%}%>href='#5'  title='Donner 5 étoiles' >☆</a><!--
+                        --><a <%if(parc.score>=4){%>style="color: orange;cursor: pointer;" <%}%>href='#4' title='Donner 4 étoiles'>☆</a><!--
+                        --><a <%if(parc.score>=3){%>style="color: orange;cursor: pointer;" <%}%>href='#3' title='Donner 3 étoiles'>☆</a><!--
+                        --><a <%if(parc.score>=2){%>style="color: orange;cursor: pointer;" <%}%>href='#2' title='Donner 2 étoiles'>☆</a><!--
+                        --><a <%if(parc.score>=1){%>style="color: orange;cursor: pointer;" <%}%>href='#1' title='Donner 1 étoile'>☆</a>
                     </div>
                     <%}%>
                     <br><br>
@@ -73,6 +71,7 @@
                     <%}%>
                 </div>
                 <%})}%>
+                <br><br>
             </div>
 
         </div>

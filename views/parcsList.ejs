@@ -41,17 +41,13 @@
                             <a class='pays'><%=parc.pays%></a> <br>
                             <img src='../assets/images/website.png' style='width: 5%;'>
                             <a class='website' href=<%=parc.site%> >Site officiel</a><br>
-                            <img src='../assets/images/vote.png' style='width: 5%;'>
-                            <a class='vote'> n votes with score : <%=parc.note%></a></div>
-
 
                         <div class='rating'><!--
-                            --><a  title='Donner 5 étoiles'>☆</a><!--
-                            --><a  title='Donner 4 étoiles'>☆</a><!--
-                            --><a  title='Donner 3 étoiles'>☆</a><!--
-                            --><a  title='Donner 2 étoiles'>☆</a><!--
-                            --><a  title='Donner 2 étoiles'>☆</a><!--
-                            --><a  title='Donner 1 étoile'>☆</a>
+                            --><a <%if(parc.note>=5){%>style="color: orange;cursor: pointer;" <%}%>title='Donner 5 étoiles'>☆</a><!--
+                            --><a <%if(parc.note>=4){%>style="color: orange;cursor: pointer;" <%}%> title='Donner 4 étoiles'>☆</a><!--
+                            --><a  <%if(parc.note>=3){%>style="color: orange;cursor: pointer;" <%}%>title='Donner 3 étoiles'>☆</a><!--
+                            --><a  <%if(parc.note>=2){%>style="color: orange;cursor: pointer;" <%}%>title='Donner 2 étoiles'>☆</a><!--
+                            --><a  <%if(parc.note>=1){%>style="color: orange;cursor: pointer;" <%}%>title='Donner 1 étoiles'>☆</a>
                         </div><br><br>
                         <p><%=parc.description%></p>
                         <% if(statut ==0){%><a class="btn btn-primary" id="infos" href="/user/vote/<%=parc.idparc%>" >Votez !</a><%}%>
