@@ -2,6 +2,7 @@ const express = require('express');
 const app= express();
 const serviceBd= require('./js/serviceBd');
 const alert = require('alert');
+const paypal = require('paypal-rest-sdk');
 var id;
 var stat; //statut du user
 
@@ -18,11 +19,21 @@ app.get('/connexion', (request, response) => {
 app.get('/inscription', (request, response) => {
     response.render("inscription.ejs")
 });
+app.get('/paypal', (request, response) => {
+    response.render("paypal.ejs")
+});
 app.post('/signin', (request, response) => {
     const { nom,prenom,mdp,mail,statut} = request.body;
     const db = serviceBd.getDbServiceInstance();
+    var url = "";
+    
+    if (statut == 1)
+    url += "/paypal" 
+    else if (statut == 0)
+    url += "/connexion"
+    
     db.insertNewUser(nom,prenom,mdp,mail,statut)
-        .then(data => response.redirect("/connexion"))
+        .then(data => response.redirect(url))
         .catch(err => console.log(err));
 });
 app.post('/login', (request, response) => {
@@ -107,3 +118,80 @@ app.get("/user/delete/:idParc",(request, response) => {
 
 console.log(process.env.PORT);
 app.listen(process.env.PORT,()=> console.log("running"));
+
+//PayPal
+
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': 'AW7JQ28QUeSV3E7KchRFCDmqXRdaDaFDtw3cn1jn35iRy51S2s9W65laM7x0ZNEnPazxabkBx3dfdOrq',
+    'client_secret': 'EBExRthtPX_NScFTKrIiRIeedx45MHR8xDWXFcyjlPhP2D86HBP4i6LfO20VT7o03K9VhSs2sD_Z8eVB'
+  });
+
+  app.post('/pay', (req, res) => {
+  const create_payment_json = {
+    "intent": "sale",
+    "payer": {
+        "payment_method": "paypal"
+    },
+    "redirect_urls": {
+        "return_url": "http://localhost:5000/success",
+        "cancel_url": "http://localhost:5000/cancel"
+    },
+    "transactions": [{
+        "item_list": {
+            "items": [{
+                "name": "Publication d'un parc",
+                "sku": "001",
+                "price": "10.00",
+                "currency": "EUR",
+                "quantity": 1
+            }]
+        },
+        "amount": {
+            "currency": "EUR",
+            "total": "10.00"
+        },
+        "description": "Hat for the best team ever"
+    }]
+};
+
+paypal.payment.create(create_payment_json, function (error, payment) {
+  if (error) {
+      throw error;
+  } else {
+      for(let i = 0;i < payment.links.length;i++){
+        if(payment.links[i].rel === 'approval_url'){
+          res.redirect(payment.links[i].href);
+        }
+      }
+  }
+});
+
+});
+
+app.get('/success', (req, res) => {
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+
+  const execute_payment_json = {
+    "payer_id": payerId,
+    "transactions": [{
+        "amount": {
+            "currency": "EUR",
+            "total": "10.00"
+        }
+    }]
+  };
+
+  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+    if (error) {
+        console.log(error.response);
+        throw error;
+    } else {
+        console.log(JSON.stringify(payment));
+        res.render("connexion.ejs");
+    }
+});
+});
+
+app.get('/cancel', (req, res) => res.render("paypal.ejs"));
