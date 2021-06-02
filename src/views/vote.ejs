@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Votez !</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../../css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+        <div class="container px-5">
+            <div class="logo">
+                <img src="../../assets/images/logo.PNG" style="width: 15%;" alt="logo_icon">
+                <a class="navbar-brand">ParcAdviser</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link " href="/user">Parcs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/user/userList">Mes votes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/connexion">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <!-- Page Content-->
+        <div class="container px-4 px-lg-5">
+            <!-- Heading Row-->
+            <div class="row gx-4 gx-lg-5 align-items-center my-5" id="voteview">
+                <h2>Nouveau vote :</h2>
+                    <% if (parc===undefined) { console.log("voting problem in finding parc id db")} let im="../../assets/images/"+parc.image%>
+                    <div class='col-lg-7'><img class='img-fluid rounded mb-4 mb-lg-0' src=<%=im%> /></div>
+                    <div class='col-lg-5'>
+                        <h1 class='font-weight-light'><%=parc.nom%></h1>
+                        <div class='info-site'>
+                            <h6 class = 'libelle'><%=parc.libelle%></h6>
+                            <img src='../../assets/images/question.png' style='width: 5%;'>
+                            <a class='type'><%=parc.type%></a> <br>
+                            <img src='../../assets/images/adresse1.png' style='width: 5%;'>
+                            <a class='pays'><%=parc.pays%></a> <br>
+                            <img src='../../assets/images/website.png' style='width: 5%;'>
+                            <a class='website' href=<%=parc.site%> >Site officiel</a><br>
+                            <p><%=parc.description%></p>
+                            <h3>Attribuez une note au site :</h3>
+                            <% let ad="/user/votenote/"+parc.idparc%>
+                            <form action=<%=ad%> method="post">
+                                <select name="note">
+                                    <option value="1">1/5</option>
+                                    <option value="2">2/5</option>
+                                    <option value="3">3/5</option>
+                                    <option value="4">4/5</option>
+                                    <option value="5">5/5</option>
+                                </select>
+                            <br><br>
+                                <button class="btn btn-primary" type="submit" >Enregistrer</button>
+                            </form>
+                         </div>
+                    </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2021</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>
