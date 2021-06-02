@@ -116,8 +116,6 @@ app.get("/user/delete/:idParc",(request, response) => {
 
 });
 
-console.log(process.env.PORT);
-app.listen(process.env.PORT,()=> console.log("running"));
 
 //PayPal
 
@@ -195,3 +193,5 @@ app.get('/success', (req, res) => {
 });
 
 app.get('/cancel', (req, res) => res.render("paypal.ejs"));
+console.log(process.env.PORT);
+app.listen(process.env.PORT,()=> console.log("running"));
